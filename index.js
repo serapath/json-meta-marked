@@ -54,7 +54,7 @@ if ({'required':true,'browserify':true}[method]) {
   } else if (args[0] === '--server') {
     setInput(new Error('@TODO: add stream into server deamon process'));
   // PIPED
-  } else if (args[0] === '--serialize') {
+  } else if (args[0]) {
     var $mode = args[0];
     startStream();
     startDeamon();
@@ -122,7 +122,7 @@ function startDeamon () {
 ******************************************************************************/
 function parse (string) {
   var result = jsonmatter.parse(string, {
-    regex: /^.*\n(\{[\s\S]*?\n\})(\s*)\n*\n.*\n/
+    regex: /^[\s\t\n\r]*---{1}[\s\t\n\r]*(\{[\s\S]*\}[\s\t\n\r]*)(---{1})/
   });
   var markdown        = result.__content__;
   var html            = marked(markdown).replace(/\r?\n|\r/g, "");
