@@ -1,0 +1,36 @@
+{
+  "name": "json-meta-marked",
+  "version": "1.0.0",
+  "description": "Convert markdown with json front matter to json object with metadata & html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serapath/json-meta-marked.git"
+  },
+  "keywords": [
+    "json",
+    "frontmatter",
+    "front-matter",
+    "front",
+    "matter",
+    "markdown",
+    "marked",
+    "meta",
+    "json-front-matter"
+  ],
+  "author": "serapath <dev@serapath.de> (http://www.github.com/serapath)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/serapath/json-meta-marked/issues"
+  },
+  "homepage": "https://github.com/serapath/json-meta-marked#readme",
+  "dependencies": {
+    "exemethod": "^1.1.2",
+    "html2markdown": "^1.1.0",
+    "json-matter": "^1.0.2",
+    "marked": "^0.3.3"
+  }
+}
