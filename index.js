@@ -77,8 +77,6 @@ function startStream () {
     return {
       "--parse"     : function (string) {
         var result = parse(string);
-        // stringify parsed object
-        // process.stderr.write('asdf')
         process.stdout.write(JSON.stringify(result, null, 2));
       },
       "--serialize" : function (string) {
@@ -130,8 +128,6 @@ function parse (string) {
   return result;
 }
 function serialize (object) {
-  // @TODO: maybe have option to make HTML file with frontmatter in
-  //        <!-- front matter --> at the beginning of the file
   var html    = object.__content__;
   html        = unpatch(html, object.custom);
   object.__content__  = html2markdown(html);
@@ -141,22 +137,27 @@ function serialize (object) {
   return '---' + os.EOL + result;
 }
 function unpatch (html, custom) {
-  console.error('=== UNPATCHING ... ===');
-  /* unpatch HTML
-    @TODO: replace all
-      custom[#!actionName];
-      with
-      <a href="#!actionName">&lt;Action Name&gt;</a>
-  */
-  return html; // just returned unchanged 'content' if !custom
+  // for (var key in custom) {
+  //   var htmlstring = custom[key];
+  //   for (var old; old != html;){
+  //     old = html;
+  //     html = html.replace(
+  //       htmlstring,
+  //       '<a href="('+key+')">{{'+key.substr(2,key.length)+'}}</a>'
+  //     );
+  //   }
+  // }
+  if (custom) {
+    throw new Error('@TODO: html2markdown parser is too smart - so not yet implemented - open an issue if you need it to be solved')
+  }
+  // return html;
 }
 function patch (html, custom) {
-  console.error('=== PATCHING ... ===');
-  /* patch HTML
-    @TODO: replace all
-      <a href="#!actionName">&lt;Action Name&gt;</a>
-      with
-      custom[#!actionName];
-  */
-  return html; // just returned unchanged 'content' if !custom
+  for (var key in custom) {
+    var regx = new RegExp('<a href="(' + key + ')">[^<>]*<\/a>', 'g');
+    html = html.replace(regx, function (match, contents, offset, s) {
+      return custom[key];
+    });
+  }
+  return html;
 }
