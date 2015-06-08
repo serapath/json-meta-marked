@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 'use strict';
 /******************************************************************************
   DEPENDENCIES = CUSTOM SDK [Custom Software Development Kit]
