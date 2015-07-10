@@ -29,9 +29,9 @@ Works as `cli` and `required module`
 ### [markdown2json.js]
 
 ```js
-var jsm = require('json-meta-marked');
+var jmm = require('json-meta-marked');
 var fs  = require('fs');
-var obj = jsm.parse(fs.readFileSync('jsonfront.md'));
+var obj = jmm.parse(fs.readFileSync('jsonfront.md'));
 console.log(JSON.stringify(obj, null, 2));
 
 ```
@@ -75,10 +75,10 @@ console.log(JSON.stringify(obj, null, 2));
 ### [json2markdown.js]
 
 ```js
-var jsm = require('json-meta-marked');
+var jmm = require('json-meta-marked');
 var fs  = require('fs');
 var obj = JSON.parse(fs.readFileSync('htmlified.json'));
-console.log(jsm.serialize(obj));
+console.log(jmm.serialize(obj));
 ```
 #### `$> node json2markdown.js`
 
@@ -129,13 +129,13 @@ console.log(jsm.serialize(obj));
 
 `$> node install -g json-meta-marked`
 Then you can do one of the following:
-* `$> cat jsonfront.md | jsm`
-* `$> cat jsonfront.md | jsm --parse`
+* `$> cat jsonfront.md | jmm`
+* `$> cat jsonfront.md | jmm --parse`
 
 which will print the parsed output to the terminal
 
-* `$> cat jsonfront.md | jsm > htmlified.json`
-* `$> cat jsonfront.md | jsm --parse > htmlified.json`
+* `$> cat jsonfront.md | jmm > htmlified.json`
+* `$> cat jsonfront.md | jmm --parse > htmlified.json`
 
 `$> cat htmlified.json`
 
@@ -158,11 +158,11 @@ which will print the parsed output to the terminal
 ## USAGE - From `cli` - json2markdown
 
 ### cli
-* `$> cat jsonfront.md | jsm --serialize`
+* `$> cat jsonfront.md | jmm --serialize`
 
 which will print the serialized output to the terminal
 
-* `$> cat jsonfront.md | jsm --serialize > jsonfront.md`
+* `$> cat jsonfront.md | jmm --serialize > jsonfront.md`
 
 `$> cat jsonfront.md`
 
