@@ -3,6 +3,48 @@ Convert markdown with json front matter to json object with metadata &amp; html.
 Works in both directions.  
 Works as `cli` and `required module`
 
+**special feature**  
+If you include a custom `field` in the `json` front matter, you can include `{{field}}` or `[]({{field}})` in the markdown part and in the transformation process, those placeholders in the markdown will be replaced with the value of the custom `field` of the json front matter
+
+## example
+```md
+---
+{
+  "foo": "bar",
+  "custom": {
+    "something": "world",
+    "beep": "boop"
+  }
+}
+---
+
+# Hello {{something}}
+
+This is an example, [{{beep}}]({{beep}})
+
+[//]: # (@TODO: this is a comment)
+
+* one
+* two
+* three
+
+yay, foobar :-)
+```
+
+will be transformed to:
+
+```json
+{
+  "foo": "bar",
+  "custom": {
+    "something": "world",
+    "beep": "boop"
+  },
+  "__content__": "<h1 id=\"hello-something-\">Hello world</h1><p>This is an example, boop</p><ul><li>one</li><li>two</li><li>three</li></ul><p>yay, foobar :-)</p>"
+}
+
+```
+
 ## USAGE - When `required module` -- markdown2json
 
 ### [jsonfront.md]

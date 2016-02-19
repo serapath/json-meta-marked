@@ -154,10 +154,14 @@ function unpatch (html, custom) {
 }
 function patch (html, custom) {
   for (var key in custom) {
-    var regx = new RegExp('<a href="(' + key + ')">[^<>]*<\/a>', 'g');
+    var regx = new RegExp('<a href="{{(' + key + ')}}">[^<>]*<\/a>', 'g');
     html = html.replace(regx, function (match, contents, offset, s) {
       return custom[key];
-    });
+    })
+    var regx = new RegExp('{{' + key + '}}', 'g');
+    html = html.replace(regx, function (match, contents, offset, s) {
+      return custom[key];
+    })
   }
-  return html;
+  return html
 }
