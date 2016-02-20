@@ -1,42 +1,36 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
 
-
 'use strict';
 /******************************************************************************
   DEPENDENCIES = CUSTOM SDK [Custom Software Development Kit]
 ******************************************************************************/
-
-var jsonmatter = require('json-matter');
-var marked = require('marked');
+var jsonmatter    = require('json-matter');
+var marked        = require('marked');
 var html2markdown = require('html2markdown');
-var method = require('exemethod')(function (a, b) {
-  return b;
-});
-var fs = require('fs');
-var os = require('os');
+var method        = require('exemethod')(function(a,b){return b;})
+var fs            = require('fs');
+var os            = require('os');
 /******************************************************************************
   PARAMETER = ARGUMENT + [Sanitize & Validate]
 ******************************************************************************/
-var args = process.argv.slice(2);
-function setInput(error, mode, string, filename) {
-  if (error) {
-    throw error;
-  }
-  var $mode = mode;
-  var $string = string;
-  var $filename = filename;
+var args          = process.argv.slice(2);
+function setInput (error, mode, string, filename) {
+  if (error) { throw error; }
+  var $mode       = mode;
+  var $string     = string;
+  var $filename   = filename;
 }
 /******************************************************************************
   EXPORT
 ******************************************************************************/
 // REQUIRED MODULE
-if ({ 'required': true, 'browserify': true }[method]) {
-  module.exports = {
-    parse: _parse,
-    serialize: _serialize
+if ({'required':true,'browserify':true}[method]) {
+  module.exports =  {
+    parse           : parse,
+    serialize       : serialize
   };
-} else if ({ 'npm': true, 'script': true, 'globalcli': true, 'localcli': true }[method]) {
+} else if ({'npm':true,'script':true,'globalcli':true,'localcli':true}[method]) {
   // $ node -p -e 'process.stdin.isTTY' // => true
   if (process.stdin.isTTY) {
     // SERVER $> cli --server
@@ -45,53 +39,50 @@ if ({ 'required': true, 'browserify': true }[method]) {
       console.log('To abort press: CTRL+D or CTRL+C');
       setInput(null, args[0], null, null);
       startDeamon();
-      // CLI $> cli --serialize filename
+    // CLI $> cli --serialize filename
     } else {
-        console.log('NORMAL CLI EXECUTION');
-        throw new Error('@TODO: serialize/parse from cli not implemented yet!');
-        if (args[1]) {
-          // CLI + 2 args
-          setInput(null, args[0], null, args[1]);
-        } else if (args[0]) {
-          // CLI + 1 arg
-          setInput(null, '--parse', null, args[0]);
-        } else {
-          // CLI + no args
-          setInput(new Error('@TODO: add --help option & show when given no args'));
-        }
+      console.log('NORMAL CLI EXECUTION');
+      throw new Error('@TODO: serialize/parse from cli not implemented yet!');
+      if (args[1]) { // CLI + 2 args
+        setInput(null, args[0], null, args[1]);
+      } else if (args[0]) { // CLI + 1 arg
+        setInput(null, '--parse', null, args[0]);
+      } else { // CLI + no args
+        setInput(new Error('@TODO: add --help option & show when given no args'));
       }
-    // $ echo 'foo' | node -p -e 'process.stdin.isTTY' // => undefined
-    // @TODO: !!!! Maybe "method='npm'" will not count as normal cli execution !!!! !!!!!!!!!
+    }
+  // $ echo 'foo' | node -p -e 'process.stdin.isTTY' // => undefined
+  // @TODO: !!!! Maybe "method='npm'" will not count as normal cli execution !!!! !!!!!!!!!
   } else if (args[0] === '--server') {
-      setInput(new Error('@TODO: add stream into server deamon process'));
-      // PIPED
-    } else if (args[0]) {
-        var $mode = args[0];
-        startStream();
-        startDeamon();
-      } else if (!args.length) {
-        var $mode = '--parse';
-        startStream();
-        startDeamon();
-      } else {
-        throw new Error('@TODO: whats wrong here???');
-      }
+    setInput(new Error('@TODO: add stream into server deamon process'));
+  // PIPED
+  } else if (args[0]) {
+    var $mode = args[0];
+    startStream();
+    startDeamon();
+  } else if (!args.length) {
+    var $mode     = '--parse';
+    startStream();
+    startDeamon();
+  } else {
+    throw new Error('@TODO: whats wrong here???');
+  }
 } else {
-  throw new Error('@TODO: unsupported method: ' + method);
+  throw new Error('@TODO: unsupported method: '+method);
 }
 /******************************************************************************
   PIPE STREAM
 ******************************************************************************/
-function startStream() {
+function startStream () {
   process.stdin.setEncoding('utf8');
-  process.stdin.on('data', function (data) {
+  process.stdin.on('data', function(data) {
     return {
-      "--parse": function parse(string) {
-        var result = _parse(string);
+      "--parse"     : function (string) {
+        var result = parse(string);
         process.stdout.write(JSON.stringify(result, null, 2));
       },
-      "--serialize": function serialize(string) {
-        var result = _serialize(JSON.parse(string));
+      "--serialize" : function (string) {
+        var result = serialize(JSON.parse(string));
         process.stdout.write(result);
       }
     }[$mode](data);
@@ -100,7 +91,7 @@ function startStream() {
 /******************************************************************************
   UNIX SIGNALS
 ******************************************************************************/
-function startDeamon() {
+function startDeamon () {
   // ps aux | grep yourscript
   // kill -s SIGINT [process_id]
   process.stdin.resume();
@@ -129,25 +120,25 @@ function startDeamon() {
 /******************************************************************************
   MODULE INTERNALS & HELPERS
 ******************************************************************************/
-function _parse(string) {
+function parse (string) {
   var result = jsonmatter.parse(string, {
     regex: /^[\s\t\n\r]*---{1}[\s\t\n\r]*(\{[\s\S]*\}[\s\t\n\r]*)(---{1})/
   });
-  var markdown = result.__content__;
-  var html = marked(markdown).replace(/\r?\n|\r/g, "");
-  result.__content__ = patch(html, result.custom);
+  var markdown        = result.__content__;
+  var html            = marked(markdown).replace(/\r?\n|\r/g, "");
+  result.__content__  = patch(html, result.custom);
   return result;
 }
-function _serialize(object) {
-  var html = object.__content__;
-  html = unpatch(html, object.custom);
-  object.__content__ = html2markdown(html);
-  var result = jsonmatter.serialize(object, {
-    delimiter: os.EOL + '---' + os.EOL + os.EOL
+function serialize (object) {
+  var html    = object.__content__;
+  html        = unpatch(html, object.custom);
+  object.__content__  = html2markdown(html);
+  var result  = jsonmatter.serialize(object, {
+    delimiter: os.EOL+'---'+os.EOL+os.EOL
   });
   return '---' + os.EOL + result;
 }
-function unpatch(html, custom) {
+function unpatch (html, custom) {
   // for (var key in custom) {
   //   var htmlstring = custom[key];
   //   for (var old; old != html;){
@@ -159,22 +150,22 @@ function unpatch(html, custom) {
   //   }
   // }
   if (custom) {
-    throw new Error('@TODO: html2markdown parser is too smart - so not yet implemented - open an issue if you need it to be solved');
+    throw new Error('@TODO: html2markdown parser is too smart - so not yet implemented - open an issue if you need it to be solved')
   }
   // return html;
 }
-function patch(html, custom) {
+function patch (html, custom) {
   for (var key in custom) {
     var regx = new RegExp('<a href="{{(' + key + ')}}">[^<>]*<\/a>', 'g');
     html = html.replace(regx, function (match, contents, offset, s) {
       return custom[key];
-    });
+    })
     var regx = new RegExp('{{' + key + '}}', 'g');
     html = html.replace(regx, function (match, contents, offset, s) {
       return custom[key];
-    });
+    })
   }
-  return html;
+  return html
 }
 
 }).call(this,require('_process'))
@@ -2888,37 +2879,58 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],12:[function(require,module,exports){
-'use strict';
-
 /******************************************************************************
   IMPORT MODULES
 ******************************************************************************/
-var jmm = require('..');
+var jmm = require('..')
 /******************************************************************************
   DUMMY DATA
 ******************************************************************************/
-var markdown = ['  ', '---', '{', '  "foo": "bar",', '  "custom": {', '    "something": "world",', '    "beep": "boop"', '  }', '}', '---', '', '# Hello {{something}}', '', 'This is an example, [{{beep}}]({{beep}})', '', '[//]: # (@TODO: this is a comment)', '', '* one', '* two', '* three', '', 'yay, foobar :-)'].join('\n');
+var markdown = [
+  '  ',
+  '---',
+  '{',
+  '  "foo": "bar",',
+  '  "custom": {',
+  '    "something": "world",',
+  '    "beep": "boop"',
+  '  }',
+  '}',
+  '---',
+  '',
+  '# Hello {{something}}',
+  '',
+  'This is an example, [{{beep}}]({{beep}})',
+  '',
+  '[//]: # (@TODO: this is a comment)',
+  '',
+  '* one',
+  '* two',
+  '* three',
+  '',
+  'yay, foobar :-)',
+].join('\n')
 /******************************************************************************
   EXAMPLE
 ******************************************************************************/
-var rawMarkdown = document.createElement('xmp');
-var hr1 = document.createElement('hr');
-var markdownHTML = document.createElement('div');
-var hr2 = document.createElement('hr');
-var rawJMM = document.createElement('xmp');
+var rawMarkdown   = document.createElement('xmp')
+var hr1           = document.createElement('hr')
+var markdownHTML  = document.createElement('div')
+var hr2           = document.createElement('hr')
+var rawJMM        = document.createElement('xmp')
 
-var x = jmm.parse(markdown);
+var x = jmm.parse(markdown)
 
-rawMarkdown.innerHTML = markdown;
-markdownHTML.innerHTML = x.__content__;
-rawJMM.innerHTML = JSON.stringify(x, null, 2);
+rawMarkdown.innerHTML   = markdown
+markdownHTML.innerHTML  = x.__content__
+rawJMM.innerHTML        = JSON.stringify(x, null, 2)
 
-document.body.appendChild(rawMarkdown);
-document.body.appendChild(hr1);
-document.body.appendChild(markdownHTML);
-document.body.appendChild(hr2);
-document.body.appendChild(rawJMM);
+document.body.appendChild(rawMarkdown)
+document.body.appendChild(hr1)
+document.body.appendChild(markdownHTML)
+document.body.appendChild(hr2)
+document.body.appendChild(rawJMM)
 
-console.log(x);
+console.log(x)
 
 },{"..":1}]},{},[12]);
