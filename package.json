@@ -1,6 +1,6 @@
 {
   "name": "json-meta-marked",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Convert markdown with json front matter to json object with metadata & html",
   "main": "index.js",
   "bin": {
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/serapath/json-meta-marked#readme",
   "dependencies": {
-    "exemethod": "^1.1.4",
+    "exemethod": "^1.3.1",
     "html2markdown": "^1.1.0",
     "json-matter": "^1.0.2",
     "marked": "^0.3.3"
