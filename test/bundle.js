@@ -14,7 +14,7 @@ var os            = require('os');
 /******************************************************************************
   PARAMETER = ARGUMENT + [Sanitize & Validate]
 ******************************************************************************/
-var args          = process.argv.slice(2);
+var args          = process.argv.slice(2) || [];
 function setInput (error, mode, string, filename) {
   if (error) { throw error; }
   var $mode       = mode;
