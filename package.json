@@ -1,6 +1,6 @@
 {
   "name": "json-meta-marked",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Convert markdown with json front matter to json object with metadata & html",
   "main": "index.js",
   "bin": {

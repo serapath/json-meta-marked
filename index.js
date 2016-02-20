@@ -28,7 +28,9 @@ if ({'required':true,'browserify':true}[method]) {
     parse           : parse,
     serialize       : serialize
   };
-} else if ({'npm':true,'script':true,'globalcli':true,'localcli':true}[method]) {
+} else if ({
+  'npm':true,'script':true,'globalcli':true,'localcli':true,'browser':true
+}[method]) {
   // $ node -p -e 'process.stdin.isTTY' // => true
   if (process.stdin.isTTY) {
     // SERVER $> cli --server
