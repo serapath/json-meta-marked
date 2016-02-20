@@ -1,6 +1,6 @@
 {
   "name": "json-meta-marked",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Convert markdown with json front matter to json object with metadata & html",
   "main": "index.js",
   "bin": {
@@ -47,10 +47,10 @@
     "html2markdown": "^1.1.0",
     "json-matter": "^1.0.2",
     "marked": "^0.3.3",
+    "babel-preset-es2015": "^6.5.0",
     "babelify": "^7.2.0"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.5.0",
     "opn-cli": "^3.1.0",
     "watchify": "^3.7.0"
   }
